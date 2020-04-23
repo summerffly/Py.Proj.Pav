@@ -157,6 +157,10 @@ if __name__ == "__main__":
     dstdirpath4 = "W:\\Bakup.Samba\\2020.BOX.V"
     SyncSambaNetdisk(srcdirpath4, dstdirpath4)
 
+    srcdirpath5 = "\\\\192.168.11.1\\samba\\AD.强词有理-建筑300秒"
+    dstdirpath5 = "W:\\Bakup.Samba\\AD.强词有理-建筑300秒"
+    SyncSambaNetdisk(srcdirpath5, dstdirpath5)
+
     print("")
     print("------------------------------")
     print("Samba Sync Success :)")
