@@ -131,6 +131,22 @@ def PatchCutPostSegment(filepath, segnum):
             os.rename(filepath + "\\" + filename, filepath + "\\" + filenameC)
 
 
+### 批处理匹配剧集名称 ###
+def PatchMatchEpisodeTXT(file_path, ep_txt_path):
+    ep_txt_file = open(ep_txt_path, encoding="utf-8")
+    for line in ep_txt_file:
+        print(line[0:-1])
+    file_list = os.listdir(file_path)
+    for file_name in file_list:
+        file_name_npf = file_name[0:-4]
+        print(file_name_npf)
+        for line in ep_txt_file:
+            matchObj = re.search(file_name_npf, line[0:-1])
+            if matchObj:
+                #pass
+                print(line[9:-1])
+
+
 ### 批处理Clean MacOS ###
 def PatchCleanMacOS(filepath):
     filenames = list()
@@ -176,7 +192,6 @@ if __name__ == "__main__":
     ShowFileList(filepath)
     
     loopflag = 1
-    
     while loopflag == 1:
         print("-----------------------------------")
         print("Mode A >>> 批处理增加前缀")
@@ -185,6 +200,7 @@ if __name__ == "__main__":
         print("Mode R >>> 批处理替换字符串")
         print("Mode CF >>> 批处理切割字符前端")
         print("Mode CP >>> 批处理切割字符后端")
+        print("Mode MATCH >>> 批处理匹配文件名称")
         print("Mode CMOS >>> 批处理Clean MacOS")
         print("-----------------------------------")
     
@@ -209,6 +225,9 @@ if __name__ == "__main__":
         elif prMode == "CP":
             segnum = int(input("输入截断字符后段标: "))
             PatchCutPostSegment(filepath, segnum)
+        elif prMode == "MATCH":
+            ep_txt_path = input("输入TXT文本路径: ")
+            PatchMatchEpisodeTXT(filepath, ep_txt_path)
         elif prMode == "CMOS":
             PatchCleanMacOS(filepath)
         elif prMode == "exit":
@@ -229,8 +248,3 @@ if __name__ == "__main__":
         print("PR Success :)")
         print("------------------------------")
         print("")
-
-
-#------------------------------#
-#    River flows in summer     #
-#------------------------------#
