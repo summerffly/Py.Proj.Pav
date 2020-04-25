@@ -133,18 +133,29 @@ def PatchCutPostSegment(filepath, segnum):
 
 ### 批处理匹配剧集名称 ###
 def PatchMatchEpisodeTXT(file_path, ep_txt_path):
-    ep_txt_file = open(ep_txt_path, encoding="utf-8")
-    for line in ep_txt_file:
-        print(line[0:-1])
     file_list = os.listdir(file_path)
     for file_name in file_list:
-        file_name_npf = file_name[0:-4]
-        print(file_name_npf)
-        for line in ep_txt_file:
-            matchObj = re.search(file_name_npf, line[0:-1])
-            if matchObj:
-                #pass
-                print(line[9:-1])
+        file_match = SingleMatchEpisodeTXT(file_name, ep_txt_path)
+        if file_match:
+            print(file_name[0:-4] + ' - ' + file_match)
+    if MakeDecision() == "Y":
+        for file_name in file_list:
+            file_match  = SingleMatchEpisodeTXT(file_name, ep_txt_path)
+            if file_match:
+                new_file_name = file_name[0:-4] + ' - ' + file_match + file_name[-4:]
+                print(new_file_name)
+                os.rename(file_path + "\\" + file_name, file_path + "\\" + new_file_name)
+
+
+### 匹配单集剧集名称 ###
+### 不能循环嵌套 内层只执行一次 ###
+def SingleMatchEpisodeTXT(file_name, ep_txt_path):
+    ep_txt_file = open(ep_txt_path, encoding="utf-8")
+    file_name_npf = file_name[0:-4]
+    for lines in ep_txt_file:
+        matchObj = re.search(file_name_npf, lines[0:9])
+        if matchObj:
+            return lines[9:-1]
 
 
 ### 批处理Clean MacOS ###
