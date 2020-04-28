@@ -141,25 +141,20 @@ if __name__ == "__main__":
     print("------------------------------")
     print("")
 
-    srcdirpath1 = "\\\\192.168.11.1\\samba\\AD.PornTuTu"
-    dstdirpath1 = "W:\\Bakup.Samba\\AD.PornTuTu"
-    SyncSambaNetdisk(srcdirpath1, dstdirpath1)
+    src_dir_base = "\\\\192.168.11.1\\samba\\"
+    dst_dir_base = "W:\\Bakup.Samba\\"
 
-    srcdirpath2 = "\\\\192.168.11.1\\samba\\AD.Kindle书屋"
-    dstdirpath2 = "W:\\Bakup.Samba\\AD.Kindle书屋"
-    SyncSambaNetdisk(srcdirpath2, dstdirpath2)
+    sync_dir_list = list()
+    sync_dir_list.append("AD.PornTuTu")
+    sync_dir_list.append("AD.Kindle书屋")
+    sync_dir_list.append("AD.iMagazine")
+    sync_dir_list.append("2020.BOX.V")
+    sync_dir_list.append("AD.强词有理-建筑300秒")
 
-    srcdirpath3 = "\\\\192.168.11.1\\samba\\AD.iMagazine"
-    dstdirpath3 = "W:\\Bakup.Samba\\AD.iMagazine"
-    SyncSambaNetdisk(srcdirpath3, dstdirpath3)
-
-    srcdirpath4 = "\\\\192.168.11.1\\samba\\2020.BOX.V"
-    dstdirpath4 = "W:\\Bakup.Samba\\2020.BOX.V"
-    SyncSambaNetdisk(srcdirpath4, dstdirpath4)
-
-    srcdirpath5 = "\\\\192.168.11.1\\samba\\AD.强词有理-建筑300秒"
-    dstdirpath5 = "W:\\Bakup.Samba\\AD.强词有理-建筑300秒"
-    SyncSambaNetdisk(srcdirpath5, dstdirpath5)
+    for sync_dir in sync_dir_list:
+        src_dir_path = src_dir_base + sync_dir
+        dst_dir_path = dst_dir_base + sync_dir
+        SyncSambaNetdisk(src_dir_path, dst_dir_path)
 
     print("")
     print("------------------------------")
