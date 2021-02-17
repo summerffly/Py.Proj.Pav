@@ -20,24 +20,43 @@ def SyncSambaNetdisk(src_dir_base, dst_dir_base, sync_dir):
     src_file_list = list()
     DirTraverser(src_dir_base, sync_dir, src_dir_list, src_file_list)
 
+    dst_dir_list = list()
+    dst_file_list = list()
+    DirTraverser(dst_dir_base, sync_dir, dst_dir_list, dst_file_list)
+
     sync_dir_list = list()
     DirComparer(dst_dir_base, src_dir_list, sync_dir_list)
 
     sync_file_list = list()
     FileComparer(dst_dir_base, src_file_list, sync_file_list)
 
+    del_dir_list = list()
+    DirComparer(src_dir_base, dst_dir_list, del_dir_list)
+    
+    del_file_list = list()
+    FileComparer(src_dir_base, dst_file_list, del_file_list)
+
     if len(sync_dir_list) == 0:
-        if len(sync_file_list) == 0:
-            print(">>> Dir List Synced : )")
-            print(">>> File List Synced : )")
-            print("")
-            return
+        if len(del_dir_list) == 0:
+                if len(sync_file_list) == 0:
+                    if len(del_file_list) == 0:
+                        print(">>> Dir List Synced : )")
+                        print(">>> File List Synced : )")
+                        print("")
+                        return
 
     if len(sync_dir_list) != 0:
         print(">>>>>>>>>><<<<<<<<<<<")
         print(">>> Sync Dir List <<<")
         print(">>>>>>>>>><<<<<<<<<<<")
         for dir_name in sync_dir_list:
+            print(dir_name)
+
+    if len(del_dir_list) != 0:
+        print(">>>>>>>>>><<<<<<<<<<<")
+        print(">>> Del Dir List <<<")
+        print(">>>>>>>>>><<<<<<<<<<<")
+        for dir_name in del_dir_list:
             print(dir_name)
 
     if len(sync_file_list) != 0:
@@ -47,7 +66,20 @@ def SyncSambaNetdisk(src_dir_base, dst_dir_base, sync_dir):
         for file_name in sync_file_list:
             print(file_name)
 
+    if len(del_file_list) != 0:
+        print(">>>>>>>>>><<<<<<<<<<<")
+        print(">>> Del File List <<<")
+        print(">>>>>>>>>><<<<<<<<<<<")
+        for file_name in del_file_list:
+            print(file_name)
+
     if MakeDecision("同步") == "Y":
+        for file_name in del_file_list:
+            os.remove(dst_dir_base + file_name)
+            print('Del ## %s' %file_name)
+        for dir_name in del_dir_list:
+            os.rmdir(dst_dir_base + dir_name)
+            print('DelDir ## %s' %dir_name)
         if os.path.exists(dst_dir_base + sync_dir) == False:
             os.makedirs(dst_dir_base + sync_dir)
         for dir_name in sync_dir_list:
@@ -55,25 +87,25 @@ def SyncSambaNetdisk(src_dir_base, dst_dir_base, sync_dir):
         for file_name in sync_file_list:
             #shutil.copyfile(filename, bkfilename)
             shutil.copy2(src_dir_base + file_name, dst_dir_base + file_name)
-            print(file_name)
+            print('Sync ## %s' %file_name)
         
         print("")
 
 
 ### 文件夹逐层遍历 ###
-def DirTraverser(src_dir_base, sync_dir, tv_dir_list, tv_file_list):
-    src_base_len = len(src_dir_base)
-    file_list = os.listdir(src_dir_base + sync_dir)
+def DirTraverser(dir_base, sync_dir, tv_dir_list, tv_file_list):
+    dir_base_len = len(dir_base)
+    file_list = os.listdir(dir_base + sync_dir)
     for file in file_list:
         # 利用os.path.join()方法取得路径全名
-        # 否则每次只能遍历一层目录 (?)
-        full_path = os.path.join(src_dir_base + sync_dir, file)
+        # 否则每次只能遍历一层目录
+        full_path = os.path.join(dir_base + sync_dir, file)
         if os.path.isdir(full_path):
-            sync_sub_dir = full_path[src_base_len:]
+            sync_sub_dir = full_path[dir_base_len:]
             tv_dir_list.append(sync_sub_dir)
-            DirTraverser(src_dir_base, sync_sub_dir, tv_dir_list, tv_file_list)
+            DirTraverser(dir_base, sync_sub_dir, tv_dir_list, tv_file_list)
         else:
-            sync_file = full_path[src_base_len:]
+            sync_file = full_path[dir_base_len:]
             tv_file_list.append(sync_file)
 
 
@@ -84,7 +116,6 @@ def DirComparer(dst_dir_base, src_dir_list, sync_dir_list):
         if os.path.exists(dst_sub_dir) == False:
             sync_dir_list.append(dir_name)
 
-
 ### 文件 比对 ###
 def FileComparer(dst_dir_base, src_file_list, sync_file_list):
     for file_name in src_file_list:
@@ -93,7 +124,6 @@ def FileComparer(dst_dir_base, src_file_list, sync_file_list):
             ffile_name = dst_file_name.split("\\")[-1]
             if ffile_name[0] != ".":
                 sync_file_list.append(file_name)
-
 
 ### 确定是否进行批处理 ###
 def MakeDecision(tips):
@@ -133,15 +163,13 @@ if __name__ == "__main__":
     print("------------------------------")
     print("")
 
-    src_dir_base = "\\\\192.168.11.1\\samba\\"
+    src_dir_base = "\\\\192.168.1.31\\summer\\"
     dst_dir_base = "W:\\Bakup.Samba\\"
 
     sync_dir_list = list()
-    sync_dir_list.append("AD.PornTuTu")
-    sync_dir_list.append("AD.Kindle书屋")
     sync_dir_list.append("AD.iMagazine")
-    sync_dir_list.append("2020.BOX.V")
-    sync_dir_list.append("AD.强词有理-建筑300秒")
+    sync_dir_list.append("AD.Kindle书库")
+    sync_dir_list.append("pipe")
 
     for sync_dir in sync_dir_list:
         SyncSambaNetdisk(src_dir_base, dst_dir_base, sync_dir)
