@@ -1,7 +1,7 @@
 # --** coding="UTF-8" **--
 
 ##############################
-###     Coded by 番茄      ###
+###     Coded by 番茄       ###
 ###    @ Summer Studio     ###
 ##############################
 
@@ -36,42 +36,44 @@ def SyncSambaNetdisk(src_dir_base, dst_dir_base, sync_dir):
     del_file_list = list()
     FileComparer(src_dir_base, dst_file_list, del_file_list)
 
-    if len(sync_dir_list) == 0:
-        if len(del_dir_list) == 0:
-                if len(sync_file_list) == 0:
-                    if len(del_file_list) == 0:
-                        print(">>> Dir List Synced : )")
-                        print(">>> File List Synced : )")
-                        print("")
-                        return
+    if len(sync_dir_list) == 0 and len(del_dir_list) == 0\
+        and len(sync_file_list) == 0 and len(del_file_list) == 0:
+            print(">>> Dir List Synced : )")
+            print(">>> File List Synced : )")
+            print("")
+            return
 
     if len(sync_dir_list) != 0:
-        print(">>>>>>>>>><<<<<<<<<<<")
-        print(">>> Sync Dir List <<<")
-        print(">>>>>>>>>><<<<<<<<<<<")
+        print("---------------------")
+        print(" Sync Dir List :")
+        print("---------------------")
         for dir_name in sync_dir_list:
             print(dir_name)
-
-    if len(del_dir_list) != 0:
-        print(">>>>>>>>>><<<<<<<<<<<")
-        print(">>> Del Dir List <<<")
-        print(">>>>>>>>>><<<<<<<<<<<")
-        for dir_name in del_dir_list:
-            print(dir_name)
+        print(" ")
 
     if len(sync_file_list) != 0:
-        print(">>>>>>>>>><<<<<<<<<<<")
-        print(">>> Sync File List <<<")
-        print(">>>>>>>>>><<<<<<<<<<<")
+        print("---------------------")
+        print(" Sync File List :")
+        print("---------------------")
         for file_name in sync_file_list:
             print(file_name)
+        print(" ")
+
+    if len(del_dir_list) != 0:
+        print("---------------------")
+        print(" Del Dir List :")
+        print("---------------------")
+        for dir_name in del_dir_list:
+            print(dir_name)
+        print(" ")
 
     if len(del_file_list) != 0:
-        print(">>>>>>>>>><<<<<<<<<<<")
-        print(">>> Del File List <<<")
-        print(">>>>>>>>>><<<<<<<<<<<")
+        print("---------------------")
+        print(" Del File List :")
+        print("---------------------")
         for file_name in del_file_list:
             print(file_name)
+        print(" ")
 
     if MakeDecision("同步") == "Y":
         for file_name in del_file_list:
@@ -84,6 +86,7 @@ def SyncSambaNetdisk(src_dir_base, dst_dir_base, sync_dir):
             os.makedirs(dst_dir_base + sync_dir)
         for dir_name in sync_dir_list:
             os.makedirs(dst_dir_base + dir_name)
+            print('MkDir ## %s' %dir_name)
         for file_name in sync_file_list:
             #shutil.copyfile(filename, bkfilename)
             shutil.copy2(src_dir_base + file_name, dst_dir_base + file_name)
@@ -107,7 +110,6 @@ def DirTraverser(dir_base, sync_dir, tv_dir_list, tv_file_list):
         else:
             sync_file = full_path[dir_base_len:]
             tv_file_list.append(sync_file)
-
 
 ### 文件夹 比对 ###
 def DirComparer(dst_dir_base, src_dir_list, sync_dir_list):
@@ -150,12 +152,6 @@ def MakeDecision(tips):
 #     MAIN FUNCTION ENTRY     #
 ###############################
 if __name__ == "__main__":
-    '''
-    if len(sys.argv) == 1:
-        print(sys.argv[0])
-    elif len(sys.argv) == 2:
-        print(sys.argv[1])
-    '''
 
     print("------------------------------")
     print("Samba Sync System")
