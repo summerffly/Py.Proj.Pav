@@ -1,7 +1,7 @@
 # --** coding="UTF-8" **--
 
 ##############################
-###     Coded by 番茄       ###
+###     Coded by 番茄      ###
 ###    @ Summer Studio     ###
 ##############################
 
@@ -45,40 +45,40 @@ def SyncSambaNetdisk(src_dir_base, dst_dir_base, sync_dir):
 
     if len(sync_dir_list) != 0:
         print("---------------------")
-        print(" Sync Dir List :")
+        print("  Sync Dir List :")
         print("---------------------")
         for dir_name in sync_dir_list:
             print(dir_name)
-        print(" ")
+        print("")
 
     if len(sync_file_list) != 0:
         print("---------------------")
-        print(" Sync File List :")
+        print("  Sync File List :")
         print("---------------------")
         for file_name in sync_file_list:
             print(file_name)
-        print(" ")
+        print("")
 
     if len(del_dir_list) != 0:
         print("---------------------")
-        print(" Del Dir List :")
+        print("  Del Dir List :")
         print("---------------------")
         for dir_name in del_dir_list:
             print(dir_name)
-        print(" ")
+        print("")
 
     if len(del_file_list) != 0:
         print("---------------------")
-        print(" Del File List :")
+        print("  Del File List :")
         print("---------------------")
         for file_name in del_file_list:
             print(file_name)
-        print(" ")
+        print("")
 
     if MakeDecision("同步") == "Y":
         for file_name in del_file_list:
             os.remove(dst_dir_base + file_name)
-            print('Del ## %s' %file_name)
+            print('DelFile ## %s' %file_name)
         for dir_name in del_dir_list:
             os.rmdir(dst_dir_base + dir_name)
             print('DelDir ## %s' %dir_name)
@@ -90,8 +90,7 @@ def SyncSambaNetdisk(src_dir_base, dst_dir_base, sync_dir):
         for file_name in sync_file_list:
             #shutil.copyfile(filename, bkfilename)
             shutil.copy2(src_dir_base + file_name, dst_dir_base + file_name)
-            print('Sync ## %s' %file_name)
-        
+            print('SyncFile ## %s' %file_name)
         print("")
 
 
@@ -112,20 +111,20 @@ def DirTraverser(dir_base, sync_dir, tv_dir_list, tv_file_list):
             tv_file_list.append(sync_file)
 
 ### 文件夹 比对 ###
-def DirComparer(dst_dir_base, src_dir_list, sync_dir_list):
+def DirComparer(dst_dir_base, src_dir_list, cmp_dir_list):
     for dir_name in src_dir_list:
         dst_sub_dir = dst_dir_base + dir_name
         if os.path.exists(dst_sub_dir) == False:
-            sync_dir_list.append(dir_name)
+            cmp_dir_list.append(dir_name)
 
 ### 文件 比对 ###
-def FileComparer(dst_dir_base, src_file_list, sync_file_list):
+def FileComparer(dst_dir_base, src_file_list, cmp_file_list):
     for file_name in src_file_list:
         dst_file_name = dst_dir_base + file_name
         if os.path.exists(dst_file_name) == False:
             ffile_name = dst_file_name.split("\\")[-1]
             if ffile_name[0] != ".":
-                sync_file_list.append(file_name)
+                cmp_file_list.append(file_name)
 
 ### 确定是否进行批处理 ###
 def MakeDecision(tips):
