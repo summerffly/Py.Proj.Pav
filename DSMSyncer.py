@@ -12,8 +12,8 @@ import sys
 import shutil   # 文件拷贝模块
 
 
-### Samba网盘同步 ###
-def SyncSambaNetdisk(src_dir_base, dst_dir_base, sync_dir):
+### 文件夹同步 ###
+def SyncDir2Dir(src_dir_base, dst_dir_base, sync_dir):
     print("Sync Dir >>> " + src_dir_base + sync_dir)
 
     src_dir_list = list()
@@ -153,25 +153,30 @@ def MakeDecision(tips):
 if __name__ == "__main__":
 
     print("------------------------------")
-    print("Samba Sync System")
-    print("Samba网盘同步助手")
+    print("DSM Sync Tool")
     print("------------------------------")
     print("")
 
-    src_dir_base = "\\\\192.168.1.31\\summer\\"
-    dst_dir_base = "W:\\Bakup.Samba\\"
+    #src_dir_base = "\\\\192.168.1.31\\summer\\"
+    src_dir_base = "\\\\DSM\\"
+    dst_dir_base = "W:\\Bakup.DSM\\"
 
     sync_dir_list = list()
-    sync_dir_list.append("AD.iMagazine")
-    sync_dir_list.append("AD.Kindle书库")
-    sync_dir_list.append("pipe")
+    sync_dir_list.append("summer\\AD.iMagazine")
+    sync_dir_list.append("summer\\AD.Kindle书库")
+    sync_dir_list.append("summer\\FIFA")
+    #sync_dir_list.append("summer\\pipe")
+    sync_dir_list.append("MiTV\\建筑300秒.S01")
+    sync_dir_list.append("MiTV\\建筑300秒.S02")
+    sync_dir_list.append("MiTV\\建筑300秒.S03")
+    sync_dir_list.append("MiTV\\一条")
 
     for sync_dir in sync_dir_list:
-        SyncSambaNetdisk(src_dir_base, dst_dir_base, sync_dir)
+        SyncDir2Dir(src_dir_base, dst_dir_base, sync_dir)
 
     print("")
     print("------------------------------")
-    print("Samba Sync Success :)")
+    print("DSM Sync Success :)")
     print("------------------------------")
     print("")
 
