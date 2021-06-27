@@ -1,4 +1,4 @@
-# --** coding="UTF-8" **--
+# -*- coding=utf-8
 
 ##############################
 ###     Coded by 番茄      ###
@@ -15,6 +15,9 @@ import shutil   # 文件拷贝模块
 ### 文件夹同步 ###
 def SyncDir2Dir(src_dir_base, dst_dir_base, sync_dir):
     print("Sync Dir >>> " + src_dir_base + sync_dir)
+
+    if os.path.exists(dst_dir_base + sync_dir) == False:
+        os.makedirs(dst_dir_base + sync_dir)
 
     src_dir_list = list()
     src_file_list = list()
@@ -157,19 +160,17 @@ if __name__ == "__main__":
     print("------------------------------")
     print("")
 
+    ## For Windows
     #src_dir_base = "\\\\192.168.1.31\\summer\\"
-    src_dir_base = "\\\\DSM\\"
-    dst_dir_base = "W:\\Bakup.DSM\\"
+    #src_dir_base = "\\\\DSM\\"
+    #dst_dir_base = "W:\\Bakup.DSM\\"
+    
+    ## For macOS
+    src_dir_base = "/Users/summer/music/"
+    dst_dir_base = "/Volumes/music/"
 
     sync_dir_list = list()
-    sync_dir_list.append("summer\\AD.iMagazine")
-    sync_dir_list.append("summer\\AD.Kindle书库")
-    sync_dir_list.append("summer\\FIFA")
-    #sync_dir_list.append("summer\\pipe")
-    sync_dir_list.append("MiTV\\建筑300秒.S01")
-    sync_dir_list.append("MiTV\\建筑300秒.S02")
-    sync_dir_list.append("MiTV\\建筑300秒.S03")
-    sync_dir_list.append("MiTV\\一条")
+    sync_dir_list.append("Hi 2021")
 
     for sync_dir in sync_dir_list:
         SyncDir2Dir(src_dir_base, dst_dir_base, sync_dir)
